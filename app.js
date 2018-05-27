@@ -6,6 +6,12 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var walletRouter = require('./routes/wallet')
+
+
+
+var kuaichadb = getDBConnection();
+
 
 var app = express();
 
@@ -21,6 +27,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/wallet', walletRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,5 +45,24 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+// get database connection
+function getDBConnection(){
+	var mysql      = require('mysql');
+	var kuaichadb = mysql.createConnection({
+	  host     : '172.16.16.2',
+	  user     : 'kuaicha',
+	  password : '07535388^kua',
+	  database : 'kuaicha',
+	  multipleStatements: true
+	});
+	 
+	kuaichadb.connect();
+
+	return kuaichadb;
+
+}
+
 
 module.exports = app;
